@@ -1,5 +1,6 @@
 const mongoose = require('mongoose');
 const { blogModel } = require('./model');
+const { getActiveResourcesInfo } = require('node:process');
 
 
 const basePage = async (req, res) => {
@@ -44,7 +45,7 @@ const getAllBlogs = async (req, res) => {
         const result = await blogModel.find();
         res.status(200).json({
             "success": "true",
-            "message": "blog created successfully...",
+            "message": "blogs found successfully...",
             "body": result
         })
     } catch (error) {
@@ -56,4 +57,21 @@ const getAllBlogs = async (req, res) => {
 
 }
 
-module.exports = { basePage, createBlogs, getAllBlogs };
+const getSingleBlog = async (req, res) => {
+    try {
+        const id = req.params.id;
+        const result = await blogModel.findById(id);
+        res.status(200).json({
+            "success": "true",
+            "message": "blog found successfully...",
+            "body": result
+        })
+    } catch (error) {
+        res.status(500).json({
+            "success": "false!",
+            "message": "internal server error..."
+        })
+    }
+}
+
+module.exports = { basePage, createBlogs, getAllBlogs, getSingleBlog };
